@@ -1,6 +1,6 @@
 var mqtt = require('mqtt');
 
-var broker_remoto = true;
+var broker_remoto = false;
 
 // ============================== CONEXIÓN LOCAL ====================================
 var broker_local = "mqtt://127.0.0.1"
