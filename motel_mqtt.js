@@ -1,6 +1,6 @@
 var mqtt = require('mqtt');
 
-var broker_remoto = false;
+var broker_remoto = true;
 
 // ============================== CONEXIÓN LOCAL ====================================
 var broker_local = "mqtt://127.0.0.1"
@@ -38,7 +38,7 @@ client_local.on('message', function (topic, message, packet) {
             var dispositivo = sub_topics[1];
             var evento = message.toString();
             alertaAlive(dispositivo, evento);
-            if (broker_remoto) pub_online_disp(dispositivo, evento);
+            if (broker_remoto) pub_online_disp("5", evento);
             break;
     }
 
@@ -59,7 +59,7 @@ var client_server;
 
 if (broker_remoto) {
     var broker_nube = "mqtt://broker.mqttdashboard.com";
-    var id_server = "20"
+    var id_server = "5"
     var options_server = {
         clientId: "p69_czu_server",
         username: "",
@@ -69,7 +69,7 @@ if (broker_remoto) {
             topic: topic_nube + "online/" + id_server,
             payload: "0",
             qos: 2,
-            retain: false
+            retain: true
         }
     };
     client_server = mqtt.connect(broker_nube, options_server);
@@ -95,7 +95,7 @@ function client_disp_connect(dispositivo) {
             topic: topic_nube + "online/" + dispositivo,
             payload: "0",
             qos: 2,
-            retain: false
+            retain: true
         }
     };
     client_disp = mqtt.connect(broker_nube, options_disp);
@@ -114,26 +114,26 @@ function client_disp_connect(dispositivo) {
 //====================================================================================================
 
 const sensores = [
-    { hab: '1', id_sensor: '21' },
-    { hab: '2', id_sensor: '22' },
-    { hab: '3', id_sensor: '23' },
-    { hab: '4', id_sensor: '24' },
-    { hab: '5', id_sensor: '20' },
-    { hab: '6', id_sensor: '20' },
-    { hab: '7', id_sensor: '20' },
-    { hab: '8', id_sensor: '20' },
-    { hab: '9', id_sensor: '20' },
-    { hab: '10', id_sensor: '20' },
-    { hab: '11', id_sensor: '20' },
-    { hab: '12', id_sensor: '20' },
-    { hab: '13', id_sensor: '20' },
-    { hab: '14', id_sensor: '20' },
-    { hab: '15', id_sensor: '20' },
-    { hab: '16', id_sensor: '20' },
+    { hab: '1', id_sensor: '4' },
+    { hab: '2', id_sensor: '5' },
+    { hab: '3', id_sensor: '6' },
+    { hab: '4', id_sensor: '7' },
+    { hab: '5', id_sensor: '8' },
+    { hab: '6', id_sensor: '9' },
+    { hab: '7', id_sensor: '10' },
+    { hab: '8', id_sensor: '11' },
+    { hab: '9', id_sensor: '12' },
+    { hab: '10', id_sensor: '13' },
+    { hab: '11', id_sensor: '14' },
+    { hab: '12', id_sensor: '15' },
+    { hab: '13', id_sensor: '16' },
+    { hab: '14', id_sensor: '17' },
+    { hab: '15', id_sensor: '18' },
+    { hab: '16', id_sensor: '19' },
     { hab: '17', id_sensor: '20' },
-    { hab: '18', id_sensor: '20' },
-    { hab: '19', id_sensor: '20' },
-    { hab: '20', id_sensor: '20' },
+    { hab: '18', id_sensor: '21' },
+    { hab: '19', id_sensor: '22' },
+    { hab: '20', id_sensor: '23' },
 ];
 
 function get_id_sensor_by_hab(hab) {
@@ -164,7 +164,7 @@ function pub_online_server() {
     publish_nube(client_server, publish_topic, "1");
 }
 
-function publish_nube(client, topic, msg, options = { retain: false, qos: 2 }) {
+function publish_nube(client, topic, msg, options = { retain: true, qos: 2 }) {
     console.log("PUB: " + topic + " -> ", msg);
     if (client.connected == true) {
         client.publish(topic, msg, options);
@@ -179,8 +179,8 @@ function suscripcion_local() {
 
 //=================================================================================
 /*  Se ejecuta cuando la puerta de una habitación dispara un evento. El estado puede ser: 
-        0: cierre, ocupacion
-        1: apertura, liberacion         */
+        1: cierre, ocupacion
+        0: apertura, liberacion         */
 function registrarSensor(habitacion, evento) {
     console.log("Habitación_" + habitacion + " -> " + evento);
     // Insertar función de almacenamiento para registrar el evento
